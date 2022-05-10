@@ -32,7 +32,8 @@ public class LoginCheckFilter implements Filter {
                 "/backend/**",
                 "/front/**",
                 // 前台登录
-                "/user/login"
+                "/user/login",
+                "/user/sendMsg"
 
         };
 

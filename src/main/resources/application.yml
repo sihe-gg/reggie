@@ -14,7 +14,13 @@ spring:
     url: jdbc:mysql://192.168.50.244:3306/db_reggie?allowPublicKeyRetrieval=true&serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: root
     password: root
-
+  redis:
+    host: 192.168.50.244
+    port: 6379
+    database: 0
+  cache:
+    redis:
+      time-to-live: 1800000 #设置缓存过期时间 30min
 
 mybatis-plus:
   global-config:
