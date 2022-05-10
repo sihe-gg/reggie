@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -94,6 +96,7 @@ public class DishController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "dishCache", key = "#dishDto.categoryId") // 清除缓存
     public Result<String> addDish(@RequestBody DishDto dishDto) {
         dishService.saveWithFlavor(dishDto);
         return Result.success("菜品添加成功！");
@@ -128,6 +131,7 @@ public class DishController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "dishCache", key = "#dishDto.categoryId")// 清除缓存
     public Result<String> updateDish(@RequestBody DishDto dishDto) {
 
         dishService.updateWithFlavor(dishDto);
@@ -140,6 +144,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "dishCache", allEntries = true)// 清除缓存
     public Result<String> deleteDish(@RequestParam List<Long> ids) {
         dishService.deleteWithFlavor(ids);
 
@@ -165,6 +170,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")                        // categoryId
+    @Cacheable(value = "dishCache", key = "#dish.getCategoryId()")// 设置缓存
     public Result<List<DishDto>> selectAll(Dish dish) {
         // 查询菜品
         LambdaQueryWrapper<Dish> dqw = new LambdaQueryWrapper<>();

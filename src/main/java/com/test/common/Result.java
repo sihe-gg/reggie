@@ -2,11 +2,12 @@ package com.test.common;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class Result<T> {
+public class Result<T> implements Serializable {
 
     private Integer code;   // 编码：1成功，0或其他失败
 
