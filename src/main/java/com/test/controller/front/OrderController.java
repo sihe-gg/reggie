@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,5 +93,42 @@ public class OrderController {
         ordersDtoPage.setRecords(ordersDtos);
 
         return Result.success(ordersDtoPage);
+    }
+
+    /**
+     * 查询订单列表
+     * @param page
+     * @param pageSize
+     * @param number
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    @GetMapping("/page")
+    public Result<Page> showList(Integer page, Integer pageSize, Integer number
+            , String beginTime, String endTime) {
+
+        Page<Orders> pageInfo = new Page<>();
+
+        LambdaQueryWrapper<Orders> qw = new LambdaQueryWrapper<>();
+        qw.like(number != null, Orders::getId, number)
+          .between(beginTime != null && endTime != null, Orders::getOrderTime, beginTime, endTime)
+          .orderByDesc(Orders::getOrderTime);
+
+        ordersService.page(pageInfo, qw);
+
+        return Result.success(pageInfo);
+    }
+
+    /**
+     * 更新派送状态
+     * @param orders
+     * @return
+     */
+    @PutMapping
+    public Result<String> setStatus(@RequestBody Orders orders) {
+        ordersService.updateById(orders);
+
+        return Result.success("修改成功!");
     }
 }
