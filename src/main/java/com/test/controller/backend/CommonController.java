@@ -11,10 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 /**
@@ -37,6 +34,8 @@ public class CommonController {
         suffix = suffix.substring(suffix.lastIndexOf("."));
         String originalName = UUID.randomUUID().toString() + suffix;
 
+
+
         try {
             // 转存图片到指定位置
             file.transferTo(new File(rootPath + originalName));
@@ -52,12 +51,14 @@ public class CommonController {
     public void download(String name, HttpServletResponse response) {
         // 输入流读取图片
         try {
-            FileInputStream fis = new FileInputStream(new File(rootPath + name));
+
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("backend/images/dish/" + name);
+            //FileInputStream fis = new FileInputStream(new File(rootPath + name));
             ServletOutputStream outputStream = response.getOutputStream();
 
             int len = 0;
             byte[] bytes = new byte[1024];
-            while((len = fis.read(bytes)) != -1) {
+            while((len = is.read(bytes)) != -1) {
                 // 通过输出流发送图片
                 outputStream.write(bytes, 0, len);
                 outputStream.flush();
