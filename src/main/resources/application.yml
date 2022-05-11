@@ -36,3 +36,5 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+reggie-test-path: "F:/java_program/dish/"
+reggie-product-path: "/home/jaks/reggie/images/dish/"

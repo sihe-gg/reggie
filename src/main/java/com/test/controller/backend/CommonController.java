@@ -3,6 +3,7 @@ package com.test.controller.backend;
 import com.test.common.Result;
 import com.test.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -25,10 +25,17 @@ import java.util.UUID;
 @RequestMapping("/common")
 public class CommonController {
 
-    private String rootPath = this.getClass().getClassLoader().getResource("backend/images/dish/").getPath();
+    @Value("${reggie-test-path}")
+    private String testPath;
+
+    @Value("${reggie-product-path}")
+    private String productPath;
 
     @PostMapping("/upload")
     public Result<String> upload(MultipartFile file) {
+        // 判断是 win 还是 linux
+        String rootPath = System.getProperty("os.name").toLowerCase().startsWith("win") ? testPath : productPath;
+
         // 获取项目根路径
         log.info("图片上传的根目录为：{}", rootPath);
 
@@ -50,6 +57,9 @@ public class CommonController {
 
     @GetMapping("/download")
     public void download(String name, HttpServletResponse response) {
+        // 判断是 win 还是 linux
+        String rootPath = System.getProperty("os.name").toLowerCase().startsWith("win") ? testPath : productPath;
+
         // 输入流读取图片
         try {
             FileInputStream fis = new FileInputStream(new File(rootPath + name));
@@ -65,6 +75,5 @@ public class CommonController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
