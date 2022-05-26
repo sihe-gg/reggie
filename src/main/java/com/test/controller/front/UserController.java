@@ -51,9 +51,7 @@ public class UserController {
             redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
 
             // 发送验证码
-            SMSUtils.sendMessage("AKIDjETSBcmfIejX4LL4VgcHeka9SUGkxtZx",
-                    "8zZsue7JEsFMCl22mFSO4TaQzHI2UgbE","1400672356","上来晒太阳的人公众号",
-                    "1391083", phone, code);
+
 
             return Result.success("短信发送成功！");
         }
